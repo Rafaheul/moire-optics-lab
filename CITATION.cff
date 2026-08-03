@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this educational software, please cite it."
+title: "Moiré Optics Lab"
+type: software
+authors:
+  - family-names: "dos Santos"
+    given-names: "Rafael Vicente Freires"
+version: 2.3.1
+date-released: 2026-08-03
+license: MIT
+keywords:
+  - moire
+  - optics
+  - spatial aliasing
+  - discrete sampling
+  - computational physics

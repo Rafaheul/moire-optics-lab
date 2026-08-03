@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Interactive lab for geometric Moiré patterns and spatial aliasing."
+    />
+    <title>Moiré Optics Lab</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar" aria-label="Application navigation" data-i18n-aria="app_navigation">
+        <div class="sidebar-header">
+          <img class="brand-logo" src="assets/moire-logo.png" alt="" />
+          <button
+            class="icon-button sidebar-toggle"
+            id="sidebar-toggle"
+            type="button"
+            aria-expanded="true"
+            aria-label="Collapse navigation"
+            title="Collapse navigation"
+          >
+            <span aria-hidden="true">☰</span>
+          </button>
+          <span class="brand-mark" aria-hidden="true">⌁</span>
+          <span class="sidebar-title">Moiré Lab</span>
+        </div>
+
+        <nav class="navigation" aria-label="Lab sections" data-i18n-aria="lab_sections">
+          <button class="nav-item is-active" type="button" data-page-target="geometric" data-nav-key="nav_geometric">
+            <span class="nav-icon" aria-hidden="true">⌁</span>
+            <span class="nav-label" data-i18n="nav_geometric">Geometric Moiré</span>
+          </button>
+          <button class="nav-item" type="button" data-page-target="sampling" data-nav-key="nav_sampling">
+            <span class="nav-icon" aria-hidden="true">≈</span>
+            <span class="nav-label" data-i18n="nav_sampling">Sampling</span>
+          </button>
+          <button class="nav-item" type="button" data-page-target="theory" data-nav-key="nav_theory">
+            <span class="nav-icon" aria-hidden="true">i</span>
+            <span class="nav-label" data-i18n="nav_theory">Theory</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <button
+            class="language-quick"
+            id="language-quick"
+            type="button"
+            aria-label="Switch language"
+            title="Switch language"
+          >
+            PT
+          </button>
+          <label class="language-picker" for="language-select">
+            <span data-i18n="language">Language</span>
+            <select id="language-select">
+              <option value="en">English</option>
+              <option value="pt">Português-BR</option>
+            </select>
+          </label>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="hero">
+          <div class="hero-branding">
+            <img class="hero-logo" src="assets/moire-logo.png" alt="Moiré pattern mark" />
+            <div>
+          <p class="eyebrow" data-i18n="eyebrow">INTERACTIVE OPTICS LAB</p>
+          <h1 data-i18n="title">Moiré Optics Lab</h1>
+            </div>
+          </div>
+          <p data-i18n="subtitle">
+            Explore spatial beats and sampling aliasing in real time.
+          </p>
+        </header>
+
+        <section class="page" id="page-geometric">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow" data-i18n="nav_geometric">Geometric Moiré</p>
+              <div class="section-title-row">
+                <h2 data-i18n="geometric_heading">See the beat emerge</h2>
+                <button class="page-guide-button" type="button" data-help-key="page_geometric" aria-haspopup="dialog">
+                  <span class="page-guide-icon" aria-hidden="true">?</span>
+                  <span data-i18n="page_guide">Page guide</span>
+                </button>
+              </div>
+            </div>
+            <p data-i18n="geometric_intro">
+              Move a control and the three patterns update immediately.
+            </p>
+          </div>
+
+          <div class="geometry-workbench">
+            <aside class="control-panel compact-panel" aria-label="Geometric controls" data-i18n-aria="geometric_controls">
+              <div class="control-row">
+                <label for="grid1-period" data-i18n="grid1_period">Grid 1 period</label>
+                <input id="grid1-period" type="range" min="5" max="40" step="0.5" value="14" />
+                <input class="control-number" id="grid1-period-number" type="number" min="5" max="40" step="0.5" value="14" data-i18n-aria="grid1_period" aria-label="Grid 1 period" />
+              </div>
+              <div class="control-row">
+                <label for="grid2-period" data-i18n="grid2_period">Grid 2 period</label>
+                <input id="grid2-period" type="range" min="5" max="40" step="0.5" value="15" />
+                <input class="control-number" id="grid2-period-number" type="number" min="5" max="40" step="0.5" value="15" data-i18n-aria="grid2_period" aria-label="Grid 2 period" />
+              </div>
+              <div class="control-row">
+                <label for="relative-angle" data-i18n="relative_angle">Relative angle</label>
+                <input id="relative-angle" type="range" min="-15" max="15" step="0.1" value="1.5" />
+                <input class="control-number" id="relative-angle-number" type="number" min="-15" max="15" step="0.1" value="1.5" data-i18n-aria="relative_angle" aria-label="Relative angle" />
+              </div>
+
+              <details class="advanced-controls">
+                <summary data-i18n="advanced">Advanced controls</summary>
+                <div class="control-stack">
+                  <label for="grid-waveform" data-i18n="waveform">Waveform</label>
+                  <select id="grid-waveform">
+                    <option value="sinusoidal" data-i18n="sinusoidal" selected>Sinusoidal</option>
+                    <option value="binary" data-i18n="binary">Binary lines</option>
+                  </select>
+                  <label for="combination-mode" data-i18n="combination">Combination</label>
+                  <select id="combination-mode">
+                    <option value="multiply" data-i18n="multiply">Multiply</option>
+                    <option value="average" data-i18n="average">Average</option>
+                    <option value="minimum" data-i18n="minimum">Minimum</option>
+                  </select>
+                </div>
+              </details>
+
+              <div class="metric-card">
+                <span data-i18n="estimated_period">Estimated Moiré period</span>
+                <strong id="moire-period">196.3 px</strong>
+              </div>
+            </aside>
+
+            <figure class="canvas-card">
+              <figcaption data-i18n="grid1">Grid 1</figcaption>
+              <canvas id="grid1-canvas" width="256" height="256"></canvas>
+            </figure>
+            <figure class="canvas-card">
+              <figcaption data-i18n="grid2">Grid 2</figcaption>
+              <canvas id="grid2-canvas" width="256" height="256"></canvas>
+            </figure>
+            <figure class="canvas-card">
+              <figcaption data-i18n="combined">Combined pattern</figcaption>
+              <canvas id="combined-canvas" width="256" height="256"></canvas>
+            </figure>
+          </div>
+
+          <div class="three-controls">
+            <button class="three-toggle" id="three-toggle" type="button" aria-pressed="false">
+              <span class="three-badge" aria-hidden="true">3D</span>
+              <span id="three-toggle-label">Open 3D view</span>
+            </button>
+            <p data-i18n="three_hint">Optional WebGL height map. Drag to orbit, scroll to zoom.</p>
+          </div>
+
+          <section class="three-view" id="three-view" hidden aria-labelledby="three-heading">
+            <div class="three-view-heading">
+              <div>
+                <p class="eyebrow">WEBGL</p>
+                <h3 id="three-heading" data-i18n="three_title">Moiré height map</h3>
+              </div>
+              <p data-i18n="three_note">The surface height and color are derived from the live combined pattern.</p>
+            </div>
+            <div class="three-canvas-shell" id="three-canvas" aria-label="Interactive three-dimensional Moiré surface"></div>
+          </section>
+
+          <p class="note" data-i18n="geometric_note">
+            The closer the spatial frequencies and orientations, the larger the visible beat pattern.
+          </p>
+        </section>
+
+        <section class="page" id="page-sampling" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow" data-i18n="nav_sampling">Sampling</p>
+              <div class="section-title-row">
+                <h2 data-i18n="sampling_heading">Watch a frequency fold</h2>
+                <button class="page-guide-button" type="button" data-help-key="page_sampling" aria-haspopup="dialog">
+                  <span class="page-guide-icon" aria-hidden="true">?</span>
+                  <span data-i18n="page_guide">Page guide</span>
+                </button>
+              </div>
+            </div>
+            <p data-i18n="sampling_intro">
+              A periodic field above Nyquist can appear as a lower false frequency after sampling.
+            </p>
+          </div>
+
+          <div class="sampling-layout">
+            <aside class="control-panel sampling-controls" aria-label="Sampling controls" data-i18n-aria="sampling_controls">
+              <div class="control-row">
+                <label for="signal-frequency" data-i18n="signal_frequency">Signal frequency</label>
+                <input id="signal-frequency" type="range" min="2" max="220" step="1" value="70" />
+                <input class="control-number" id="signal-frequency-number" type="number" min="2" max="220" step="1" value="70" data-i18n-aria="signal_frequency" aria-label="Signal frequency" />
+              </div>
+              <div class="control-row">
+                <label for="signal-angle" data-i18n="signal_angle">Signal angle</label>
+                <input id="signal-angle" type="range" min="-45" max="45" step="0.5" value="8" />
+                <input class="control-number" id="signal-angle-number" type="number" min="-45" max="45" step="0.5" value="8" data-i18n-aria="signal_angle" aria-label="Signal angle" />
+              </div>
+              <div class="control-row">
+                <label for="signal-phase" data-i18n="signal_phase">Signal phase</label>
+                <input id="signal-phase" type="range" min="0" max="360" step="1" value="0" />
+                <input class="control-number" id="signal-phase-number" type="number" min="0" max="360" step="1" value="0" data-i18n-aria="signal_phase" aria-label="Signal phase" />
+              </div>
+              <div class="control-row">
+                <label for="sampling-density" data-i18n="sampling_density">Sampling grid</label>
+                <input id="sampling-density" type="range" min="16" max="160" step="8" value="96" />
+                <input class="control-number" id="sampling-density-number" type="number" min="16" max="160" step="8" value="96" data-i18n-aria="sampling_density" aria-label="Sampling grid" />
+              </div>
+              <div class="control-row">
+                <label for="sampling-blur" data-i18n="pre_sampling_blur">Pre-sampling blur</label>
+                <input id="sampling-blur" type="range" min="0" max="6" step="0.2" value="1.2" />
+                <input class="control-number" id="sampling-blur-number" type="number" min="0" max="6" step="0.2" value="1.2" data-i18n-aria="pre_sampling_blur" aria-label="Pre-sampling blur" />
+              </div>
+              <div class="control-row">
+                <label for="sampling-noise" data-i18n="noise">Sample noise</label>
+                <input id="sampling-noise" type="range" min="0" max="0.2" step="0.01" value="0.02" />
+                <input class="control-number" id="sampling-noise-number" type="number" min="0" max="0.2" step="0.01" value="0.02" data-i18n-aria="noise" aria-label="Sample noise" />
+              </div>
+              <label class="select-label" for="sampling-waveform" data-i18n="waveform">Waveform</label>
+              <select id="sampling-waveform">
+                <option value="sinusoidal" data-i18n="sinusoidal">Sinusoidal</option>
+                <option value="binary" data-i18n="binary">Binary lines</option>
+              </select>
+            </aside>
+
+            <div class="sampling-visuals">
+              <div class="metric-grid">
+                <div class="metric-card"><span data-i18n="input_frequency">Input frequency</span><strong id="input-frequency">70.0</strong></div>
+                <div class="metric-card"><span data-i18n="apparent_frequency">Alias frequency</span><strong id="alias-frequency">28.4</strong></div>
+                <div class="metric-card"><span data-i18n="nyquist">Nyquist limit</span><strong id="nyquist-frequency">48.0</strong></div>
+              </div>
+              <p id="alias-status" class="status"></p>
+              <div class="sampling-canvases">
+                <figure class="canvas-card"><figcaption data-i18n="continuous_field">Continuous field</figcaption><canvas id="field-canvas" width="256" height="256"></canvas></figure>
+                <figure class="canvas-card"><figcaption data-i18n="sampled_output">Sampled output</figcaption><canvas id="sampled-canvas" width="256" height="256"></canvas></figure>
+                <figure class="canvas-card frequency-card"><figcaption class="caption-with-help"><span data-i18n="frequency_space">Frequency space</span><button class="help-button inline-help-button" type="button" data-help-key="frequency_space" aria-haspopup="dialog">?</button></figcaption><canvas id="frequency-canvas" width="256" height="256"></canvas></figure>
+              </div>
+              <p class="note" data-i18n="sampling_note">
+                This fast visual model is educational; the Python reference model retains the detailed numerical implementation and tests.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="page theory-page" id="page-theory" hidden>
+          <p class="eyebrow" data-i18n="nav_theory">Theory</p>
+          <div class="section-title-row">
+            <h2 data-i18n="theory_heading">Theory, step by step</h2>
+            <button class="page-guide-button" type="button" data-help-key="page_theory" aria-haspopup="dialog">
+              <span class="page-guide-icon" aria-hidden="true">?</span>
+              <span data-i18n="page_guide">Page guide</span>
+            </button>
+          </div>
+          <div class="theory-grid">
+            <article><h3 data-i18n="theory_beat_title">Spatial beat</h3><p data-i18n="theory_beat">For aligned gratings, the beat frequency is the magnitude of the frequency difference.</p><code>f_M = |f_1 - f_2|</code></article>
+            <article><h3 data-i18n="theory_vector_title">What is aliasing?</h3><p data-i18n="theory_vector">Aliasing is a false lower-frequency pattern that appears when a repeating signal is sampled too coarsely to represent it uniquely.</p><code>f_alias = f - m*f_s</code></article>
+            <article><h3 data-i18n="theory_nyquist_title">Nyquist</h3><p data-i18n="theory_nyquist">A sampling grid with frequency f_s has a fundamental limit at half that frequency.</p><code>f_N = f_s / 2</code></article>
+          </div>
+          <div class="theory-lessons" id="theory-lessons" aria-live="polite"></div>
+        </section>
+        <footer class="developer-credit" data-i18n="developer_credit">Developed by Rafael V F Santos · 2026</footer>
+      </main>
+    </div>
+
+    <aside class="help-popover" id="help-popover" role="dialog" aria-modal="false" aria-labelledby="help-title" hidden>
+      <div class="help-popover-header">
+        <p class="eyebrow" data-i18n="help_heading">CONCEPT GUIDE</p>
+        <button class="help-close" id="help-close" type="button" data-i18n-aria="close_help" aria-label="Close concept guide">×</button>
+      </div>
+      <h3 id="help-title"></h3>
+      <p id="help-body"></p>
+    </aside>
+
+    <script src="app.js"></script>
+  </body>
+</html>
