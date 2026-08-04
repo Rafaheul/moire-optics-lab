@@ -7,16 +7,30 @@
       name="description"
       content="Interactive lab for geometric Moiré patterns and spatial aliasing."
     />
+    <!-- Sem script inline e sem dependência externa, a política pode ser estrita:
+         nada carrega de outra origem, e connect-src fica em 'none' porque a
+         página não faz nenhuma requisição de rede em tempo de execução. -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Moiré Optics Lab" />
+    <meta
+      property="og:description"
+      content="Interactive lab for geometric Moiré patterns and spatial aliasing. Adjust grating period, orientation, sampling density and pre-sampling blur, and watch frequencies fold in real time."
+    />
+    <meta property="og:url" content="https://rafaheul.github.io/moire-optics-lab/" />
+    <meta property="og:image" content="https://rafaheul.github.io/moire-optics-lab/assets/preview.png" />
+    <meta name="twitter:card" content="summary_large_image" />
     <title>Moiré Optics Lab</title>
     <link rel="stylesheet" href="styles.css" />
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/"
-        }
-      }
-    </script>
+    <!-- three.js 0.185.1 servido do próprio repositório: a página fica sem
+         dependência de CDN em tempo de execução, funciona offline e não pode ser
+         afetada por comprometimento de terceiros. Os módulos são importados por
+         caminho relativo, então a página não precisa de nenhum script inline e a
+         política de segurança pode continuar em script-src 'self'. -->
+
   </head>
   <body>
     <div class="app-shell">
@@ -203,8 +217,8 @@
             <aside class="control-panel sampling-controls" aria-label="Sampling controls" data-i18n-aria="sampling_controls">
               <div class="control-row">
                 <label for="signal-frequency" data-i18n="signal_frequency">Signal frequency</label>
-                <input id="signal-frequency" type="range" min="2" max="220" step="1" value="70" />
-                <input class="control-number" id="signal-frequency-number" type="number" min="2" max="220" step="1" value="70" data-i18n-aria="signal_frequency" aria-label="Signal frequency" />
+                <input id="signal-frequency" type="range" min="2" max="110" step="1" value="70" />
+                <input class="control-number" id="signal-frequency-number" type="number" min="2" max="110" step="1" value="70" data-i18n-aria="signal_frequency" aria-label="Signal frequency" />
               </div>
               <div class="control-row">
                 <label for="signal-angle" data-i18n="signal_angle">Signal angle</label>

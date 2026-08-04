@@ -20,6 +20,7 @@ const translations = {
     input_frequency: "Input frequency", apparent_frequency: "Alias frequency", nyquist: "Nyquist limit", continuous_field: "Continuous field", sampled_output: "Sampled output", frequency_space: "Frequency space",
     sampling_note: "This fast visual model is educational; the Python reference model retains the detailed numerical implementation and tests.",
     status_alias: "Aliasing: the fundamental exceeds Nyquist in at least one axis.", status_safe: "The fundamental is within the displayed Nyquist region.",
+    status_nyquist: "Exactly at Nyquist: only two samples per cycle, so the result depends on phase. Move the phase control and watch the contrast collapse.",
     theory_heading: "Theory, step by step", theory_beat_title: "What is Moiré?", theory_beat: "Moiré is a visible large-scale pattern created when two similar repeated patterns overlap with a small difference in spacing or direction.",
     theory_vector_title: "What is aliasing?", theory_vector: "Aliasing is a false lower-frequency pattern that appears when a repeating signal is sampled too coarsely to represent it uniquely.",
     theory_nyquist_title: "Nyquist frequency", theory_nyquist: "The Nyquist frequency is half the sampling frequency: the highest fundamental frequency that the ideal sampling grid can represent without folding.",
@@ -40,6 +41,7 @@ const translations = {
     input_frequency: "Frequência de entrada", apparent_frequency: "Frequência de alias", nyquist: "Limite de Nyquist", continuous_field: "Campo contínuo", sampled_output: "Saída amostrada", frequency_space: "Espaço de frequências",
     sampling_note: "Este modelo visual rápido é educacional; o modelo de referência em Python preserva a implementação numérica detalhada e seus testes.",
     status_alias: "Aliasing: a fundamental excede Nyquist em pelo menos um eixo.", status_safe: "A fundamental está dentro da região de Nyquist exibida.",
+    status_nyquist: "Exatamente em Nyquist: são apenas duas amostras por ciclo, então o resultado depende da fase. Mova o controle de fase e veja o contraste desaparecer.",
     theory_heading: "Teoria, passo a passo", theory_beat_title: "O que é Moiré?", theory_beat: "Moiré é um padrão amplo e visível criado quando dois padrões repetitivos parecidos se sobrepõem com pequena diferença de espaçamento ou direção.",
     theory_vector_title: "O que é aliasing?", theory_vector: "Aliasing é um padrão falso de frequência menor que aparece quando um sinal repetitivo é amostrado de modo muito espaçado para ser representado de forma única.",
     theory_nyquist_title: "Frequência de Nyquist", theory_nyquist: "A frequência de Nyquist é a metade da frequência de amostragem: o maior valor fundamental que uma grade ideal representa sem dobramento.",
@@ -64,7 +66,7 @@ const helpContent = {
     relative_angle: { title: "Relative angle", body: "This rotates Grid 2 relative to Grid 1. Rotation changes the direction of its spatial-frequency vector. Even two gratings with the same period create a broad Moiré pattern when their directions differ slightly." },
     grid_waveform: { title: "Waveform", body: "Sinusoidal is a smooth, single-frequency starting point and is the default. Binary lines are useful for comparison, but their sharp edges add higher harmonics. Those extra frequencies can create additional fine structure and aliasing." },
     combination_mode: { title: "Combination", body: "This selects the visual rule used to combine the two displayed gratings. Multiply emphasizes coincident bright regions; average blends both; minimum retains the darker value. It is a display model, not a universal law for every physical setup." },
-    signal_frequency: { title: "Signal frequency", body: "Frequency is counted in cycles across the displayed field of view (cycles/FOV). One cycle is one complete repeat of the wave, for example from one bright peak to the next bright peak. Thus, 70 cycles/FOV means 70 complete repeats across the full displayed width. Raising it packs more stripes into the same space. When a component exceeds the sampling limit, the sampled result can show a lower false frequency: an alias." },
+    signal_frequency: { title: "Signal frequency", body: "Frequency is counted in cycles across the displayed field of view (cycles/FOV). One cycle is one complete repeat of the wave, for example from one bright peak to the next bright peak. Thus, 70 cycles/FOV means 70 complete repeats across the full displayed width. Raising it packs more stripes into the same space. When a component exceeds the sampling limit, the sampled result can show a lower false frequency: an alias. The control stops at 110 cycles/FOV on purpose: the reference canvas is itself a 256-sample window, so it cannot honestly display a fundamental above 128 cycles/FOV. Allowing higher values would alias the reference that the experiment is supposed to compare against." },
     signal_angle: { title: "Signal angle", body: "This rotates the periodic field. In two dimensions, sampling depends on the horizontal and vertical components separately, so rotating the same total frequency can change whether and how it aliases." },
     signal_phase: { title: "Signal phase", body: "Phase shifts the pattern without changing its frequency or direction. It is useful for showing that sampling also depends on where the sample grid lands relative to the peaks and valleys." },
     sampling_density: { title: "Sampling grid", body: "This is the number of samples across each displayed axis. In this simplified model it acts as a sampling frequency of N cycles/FOV per axis, with a Nyquist limit near N/2. More samples preserve finer detail." },
@@ -83,7 +85,7 @@ const helpContent = {
     relative_angle: { title: "Ângulo relativo", body: "Ele gira a Grade 2 em relação à Grade 1. A rotação muda a direção do vetor de frequência espacial. Mesmo grades de mesmo período criam um padrão amplo de Moiré quando suas direções diferem um pouco." },
     grid_waveform: { title: "Forma de onda", body: "A senoide é suave, tem uma frequência fundamental e é o ponto de partida padrão. Linhas binárias servem para comparar, mas suas bordas abruptas introduzem harmônicos. Essas frequências extras podem criar detalhes finos e aliasing adicional." },
     combination_mode: { title: "Combinação", body: "Escolhe a regra visual que combina as duas grades mostradas. Multiplicar destaca regiões claras coincidentes; média mistura ambas; mínimo mantém o valor mais escuro. É um modelo de exibição, não uma lei universal para qualquer montagem física." },
-    signal_frequency: { title: "Frequência do sinal", body: "A frequência é contada em ciclos ao longo de todo o campo de visão exibido (ciclos/campo). Um ciclo é uma repetição completa da onda, por exemplo de um pico claro ao próximo pico claro. Assim, 70 ciclos/campo significa 70 repetições completas em toda a largura mostrada. Aumentá-la coloca mais faixas no mesmo espaço. Quando uma componente ultrapassa o limite de amostragem, o resultado pode mostrar uma frequência falsa menor: um alias." },
+    signal_frequency: { title: "Frequência do sinal", body: "A frequência é contada em ciclos ao longo de todo o campo de visão exibido (ciclos/campo). Um ciclo é uma repetição completa da onda, por exemplo de um pico claro ao próximo pico claro. Assim, 70 ciclos/campo significa 70 repetições completas em toda a largura mostrada. Aumentá-la coloca mais faixas no mesmo espaço. Quando uma componente ultrapassa o limite de amostragem, o resultado pode mostrar uma frequência falsa menor: um alias. O controle para em 110 ciclos/campo de propósito: o canvas de referência é ele próprio uma janela de 256 amostras e não consegue exibir com honestidade uma fundamental acima de 128 ciclos/campo. Permitir valores maiores aliasaria justamente a referência com a qual o experimento deveria comparar." },
     signal_angle: { title: "Ângulo do sinal", body: "Ele gira o campo periódico. Em duas dimensões, a amostragem depende separadamente das componentes horizontal e vertical; por isso, girar a mesma frequência total pode mudar se, e como, ocorre aliasing." },
     signal_phase: { title: "Fase do sinal", body: "A fase desloca o padrão sem alterar frequência ou direção. Ela mostra que a amostragem também depende de onde a grade de amostras cai em relação aos picos e vales." },
     sampling_density: { title: "Grade de amostragem", body: "É o número de amostras em cada eixo mostrado. Neste modelo simplificado, atua como frequência de amostragem de N ciclos/campo por eixo, com limite de Nyquist próximo de N/2. Mais amostras preservam detalhes mais finos." },
@@ -396,10 +398,14 @@ function renderTheory() {
   });
 }
 
+// ImageData reaproveitado por canvas: criar um novo a cada frame alocava ~260 kB
+// por canvas e só servia para o coletor de lixo.
+const imageDataCache = new WeakMap();
 function setCanvasPixels(canvas, values, colorize = false) {
   const context = canvas.getContext("2d", { alpha: false });
   const size = canvas.width;
-  const image = context.createImageData(size, size);
+  let image = imageDataCache.get(canvas);
+  if (!image || image.width !== size) { image = context.createImageData(size, size); imageDataCache.set(canvas, image); }
   for (let i = 0; i < values.length; i += 1) {
     const value = Math.max(0, Math.min(1, values[i]));
     const p = i * 4;
@@ -425,11 +431,44 @@ function gratingValue(x, y, period, angleDeg, waveform) {
   return ((phase / (2 * Math.PI)) % 1 + 1) % 1 < 0.5 ? 1 : 0;
 }
 
-function makeGrating(size, period, angleDeg, waveform) {
-  const values = new Float32Array(size * size);
+// A fase de uma grade é linear: t(x, y) = x*cos(theta)/p + y*sin(theta)/p.
+// Isso permite montar duas tabelas de tamanho n e obter cada pixel somando-as,
+// em vez de chamar trigonometria n*n vezes. gratingValue segue existindo para as
+// consultas pontuais da superfície 3D.
+function makeGrating(size, period, angleDeg, waveform, slot) {
+  const angle = angleDeg * Math.PI / 180;
+  const values = scratch(size * size, slot);
+  const tx = new Float64Array(size), ty = new Float64Array(size);
+  for (let i = 0; i < size; i += 1) {
+    tx[i] = i * Math.cos(angle) / period;
+    ty[i] = i * Math.sin(angle) / period;
+  }
+
+  if (waveform === "binary") {
+    // Onda quadrada de 50%: clara quando a parte fracionária do ciclo é < 0.5.
+    // Trabalhar direto na fase fracionária evita depender de sin(pi) valer zero,
+    // o que em ponto flutuante não acontece e inverteria um pixel por período.
+    for (let y = 0; y < size; y += 1) {
+      const base = y * size, offset = ty[y];
+      for (let x = 0; x < size; x += 1) {
+        const t = tx[x] + offset;
+        values[base + x] = ((t % 1) + 1) % 1 < .5 ? 1 : 0;
+      }
+    }
+    return values;
+  }
+
+  // Senoidal: identidade separável cos(A + B) = cos A cos B - sin A sin B.
+  const cosX = new Float64Array(size), sinX = new Float64Array(size);
+  const cosY = new Float64Array(size), sinY = new Float64Array(size);
+  for (let i = 0; i < size; i += 1) {
+    const px = 2 * Math.PI * tx[i]; cosX[i] = Math.cos(px); sinX[i] = Math.sin(px);
+    const py = 2 * Math.PI * ty[i]; cosY[i] = Math.cos(py); sinY[i] = Math.sin(py);
+  }
   for (let y = 0; y < size; y += 1) {
+    const cy = cosY[y], sy = sinY[y], base = y * size;
     for (let x = 0; x < size; x += 1) {
-      values[y * size + x] = gratingValue(x, y, period, angleDeg, waveform);
+      values[base + x] = .5 + .5 * (cosX[x] * cy - sinX[x] * sy);
     }
   }
   return values;
@@ -446,9 +485,9 @@ function estimateMoirePeriod(period1, period2, angleDeg) {
 function renderGeometry() {
   const { period1, period2, angle, waveform, combination } = state.geometry;
   const size = $("grid1-canvas").width;
-  const grid1 = makeGrating(size, period1, 0, waveform);
-  const grid2 = makeGrating(size, period2, angle, waveform);
-  const combined = new Float32Array(size * size);
+  const grid1 = makeGrating(size, period1, 0, waveform, "g1");
+  const grid2 = makeGrating(size, period2, angle, waveform, "g2");
+  const combined = scratch(size * size, "gc");
   for (let i = 0; i < combined.length; i += 1) {
     combined[i] = combination === "average" ? (grid1[i] + grid2[i]) / 2 : combination === "minimum" ? Math.min(grid1[i], grid2[i]) : grid1[i] * grid2[i];
   }
@@ -463,44 +502,124 @@ function renderGeometry() {
   if (threeState.initialized && threeState.visible) updateThreeSurface();
 }
 
-function makeField(size, frequency, angleDeg, phaseDeg, waveform) {
-  const field = new Float32Array(size * size);
+// --- Motor de amostragem -----------------------------------------------------
+// SUPERSAMPLE: o canvas "campo contínuo" tem 256 px, logo ele próprio só
+// representa até 128 ciclos/FOV. Avaliar em 512 e tirar a média para 256 evita
+// que o painel de referência apareça aliasado.
+// APERTURE: sub-amostras por lado dentro de cada detector. A média sobre elas é
+// o modelo de abertura finita (fill factor 100%), não amostragem pontual.
+const SUPERSAMPLE = 2;
+const APERTURE = 4;
+
+// Buffers reaproveitados: sem isso cada frame aloca ~8 MB e o GC derruba o FPS.
+const scratchPool = new Map();
+function scratch(length, slot) {
+  const key = `${length}:${slot}`;
+  let buffer = scratchPool.get(key);
+  if (!buffer) { buffer = new Float32Array(length); scratchPool.set(key, buffer); }
+  return buffer;
+}
+
+// Avaliação separável: cos(A + B) = cos A cos B - sin A sin B.
+// Troca n*n chamadas de Math.cos por 4n, e é ~5x mais rápido que o laço direto.
+function evaluateField(n, frequency, angleDeg, phaseDeg, waveform) {
   const angle = angleDeg * Math.PI / 180;
+  const k = 2 * Math.PI * frequency;
+  const ax = k * Math.cos(angle);
+  const ay = k * Math.sin(angle);
   const phaseOffset = phaseDeg * Math.PI / 180;
-  const cos = Math.cos(angle);
-  const sin = Math.sin(angle);
-  for (let y = 0; y < size; y += 1) {
-    for (let x = 0; x < size; x += 1) {
-      const nx = (x + .5) / size - .5;
-      const ny = (y + .5) / size - .5;
-      const phase = 2 * Math.PI * frequency * (nx * cos + ny * sin) + phaseOffset;
-      field[y * size + x] = waveform === "binary" ? (Math.cos(phase) >= 0 ? 1 : 0) : .5 + .5 * Math.cos(phase);
+  const cosX = new Float64Array(n), sinX = new Float64Array(n);
+  const cosY = new Float64Array(n), sinY = new Float64Array(n);
+  for (let i = 0; i < n; i += 1) {
+    const t = (i + .5) / n - .5;
+    const px = ax * t;          cosX[i] = Math.cos(px); sinX[i] = Math.sin(px);
+    const py = ay * t + phaseOffset; cosY[i] = Math.cos(py); sinY[i] = Math.sin(py);
+  }
+  const field = scratch(n * n, "field");
+  const binary = waveform === "binary";
+  for (let row = 0; row < n; row += 1) {
+    const cy = cosY[row], sy = sinY[row], base = row * n;
+    for (let col = 0; col < n; col += 1) {
+      const value = cosX[col] * cy - sinX[col] * sy;
+      field[base + col] = binary ? (value >= 0 ? 1 : 0) : .5 + .5 * value;
     }
   }
   return field;
 }
 
-function boxBlur(source, size, radius) {
-  if (radius < 1) return source;
-  const horizontal = new Float32Array(source.length);
-  const output = new Float32Array(source.length);
+// Média de blocos factor x factor: integra a área, não pega um ponto dela.
+function downsample(source, n, factor) {
+  const m = n / factor;
+  const output = scratch(m * m, "down");
+  const inverse = 1 / (factor * factor);
+  for (let row = 0; row < m; row += 1) {
+    for (let col = 0; col < m; col += 1) {
+      let sum = 0;
+      for (let sr = 0; sr < factor; sr += 1) {
+        const base = (row * factor + sr) * n + col * factor;
+        for (let sc = 0; sc < factor; sc += 1) sum += source[base + sc];
+      }
+      output[row * m + col] = sum * inverse;
+    }
+  }
+  return output;
+}
+
+function boxPass(source, size, radius, temporary, output) {
+  const width = radius * 2 + 1;
   for (let y = 0; y < size; y += 1) {
     let sum = 0;
     for (let x = -radius; x <= radius; x += 1) sum += source[y * size + Math.max(0, Math.min(size - 1, x))];
     for (let x = 0; x < size; x += 1) {
-      horizontal[y * size + x] = sum / (radius * 2 + 1);
+      temporary[y * size + x] = sum / width;
       sum += source[y * size + Math.min(size - 1, x + radius + 1)] - source[y * size + Math.max(0, x - radius)];
     }
   }
   for (let x = 0; x < size; x += 1) {
     let sum = 0;
-    for (let y = -radius; y <= radius; y += 1) sum += horizontal[Math.max(0, Math.min(size - 1, y)) * size + x];
+    for (let y = -radius; y <= radius; y += 1) sum += temporary[Math.max(0, Math.min(size - 1, y)) * size + x];
     for (let y = 0; y < size; y += 1) {
-      output[y * size + x] = sum / (radius * 2 + 1);
-      sum += horizontal[Math.min(size - 1, y + radius + 1) * size + x] - horizontal[Math.max(0, y - radius) * size + x];
+      output[y * size + x] = sum / width;
+      sum += temporary[Math.min(size - 1, y + radius + 1) * size + x] - temporary[Math.max(0, y - radius) * size + x];
     }
   }
   return output;
+}
+
+// Um box tem transferência sinc, com lobo NEGATIVO: ele inverte o contraste de
+// certas frequências em vez de suprimi-las. Três boxes encadeados aproximam uma
+// gaussiana (sinc^3) e derrubam esse lobo de ~21% para ~1%.
+function blurField(source, size, sigma) {
+  const radius = Math.round(sigma);
+  if (radius < 1) return source;
+  const length = size * size;
+  const temporary = scratch(length, "tmp");
+  const ping = scratch(length, "ping");
+  const pong = scratch(length, "pong");
+  let input = source, output = ping;
+  for (let pass = 0; pass < 3; pass += 1) {
+    boxPass(input, size, radius, temporary, output);
+    input = output;
+    output = output === ping ? pong : ping;
+  }
+  return input;
+}
+
+// Campo contínuo exibido: avalia acima do Nyquist do canvas e integra para 256.
+function continuousField(displaySize, frequency, angleDeg, phaseDeg, waveform, blurPx) {
+  const hi = displaySize * SUPERSAMPLE;
+  const field = downsample(evaluateField(hi, frequency, angleDeg, phaseDeg, waveform), hi, SUPERSAMPLE);
+  return blurField(field, displaySize, blurPx);
+}
+
+// Detector: grade perfeitamente uniforme de density x density, desfoque óptico
+// aplicado ANTES da amostragem, e cada amostra é a média da sua abertura.
+// O sigma é convertido para a resolução interna, então o desfoque representa o
+// mesmo filtro físico qualquer que seja a densidade escolhida.
+function detectorSamples(density, frequency, angleDeg, phaseDeg, waveform, blurPx) {
+  const n = density * APERTURE;
+  const scene = blurField(evaluateField(n, frequency, angleDeg, phaseDeg, waveform), n, blurPx * n / 256);
+  return downsample(scene, n, APERTURE);
 }
 
 function deterministicNoise(row, col) {
@@ -508,16 +627,27 @@ function deterministicNoise(row, col) {
   return (value - Math.floor(value)) - .5;
 }
 
-function drawSampledOutput(canvas, field, density, noise) {
+// Exibição por retenção de ordem zero: cada amostra vira um bloco. Blocos com
+// larguras diferentes são só um artefato de exibição; a grade de amostragem que
+// produziu os valores é uniforme.
+function drawSampledOutput(canvas, samples, density, noise) {
   const size = canvas.width;
-  const values = new Float32Array(size * size);
+  const values = scratch(size * size, "display");
+  // O ruído pertence à amostra, não ao pixel de exibição: calcular uma vez por
+  // detector em vez de uma vez por pixel evita ~56 mil chamadas de Math.sin por
+  // frame e mantém cada bloco com um valor único, como deve ser.
+  const noisy = scratch(density * density, "noisy");
+  for (let row = 0; row < density; row += 1) {
+    for (let col = 0; col < density; col += 1) {
+      const index = row * density + col;
+      noisy[index] = samples[index] + noise * deterministicNoise(row, col);
+    }
+  }
   for (let y = 0; y < size; y += 1) {
     const sampleY = Math.min(density - 1, Math.floor(y * density / size));
+    const rowBase = sampleY * density, target = y * size;
     for (let x = 0; x < size; x += 1) {
-      const sampleX = Math.min(density - 1, Math.floor(x * density / size));
-      const sourceX = Math.min(size - 1, Math.floor((sampleX + .5) * size / density));
-      const sourceY = Math.min(size - 1, Math.floor((sampleY + .5) * size / density));
-      values[y * size + x] = field[sourceY * size + sourceX] + noise * deterministicNoise(sampleY, sampleX);
+      values[target + x] = noisy[rowBase + Math.min(density - 1, Math.floor(x * density / size))];
     }
   }
   setCanvasPixels(canvas, values, true);
@@ -556,23 +686,28 @@ function drawFrequencySpace(aliasX, aliasY, inputX, inputY, nyquist) {
 function renderSampling() {
   const { frequency, angle, phase, density, blur, noise, waveform } = state.sampling;
   const size = $("field-canvas").width;
-  const field = makeField(size, frequency, angle, phase, waveform);
-  const softened = boxBlur(field, size, Math.round(blur));
-  setCanvasPixels($("field-canvas"), softened, true);
-  drawSampledOutput($("sampled-canvas"), softened, density, noise);
+  setCanvasPixels($("field-canvas"), continuousField(size, frequency, angle, phase, waveform, blur), true);
+  drawSampledOutput($("sampled-canvas"), detectorSamples(density, frequency, angle, phase, waveform, blur), density, noise);
   const radians = angle * Math.PI / 180;
   const inputX = frequency * Math.cos(radians);
   const inputY = frequency * Math.sin(radians);
-  const aliasX = wrapFrequency(inputX, density);
-  const aliasY = wrapFrequency(inputY, density);
+  let aliasX = wrapFrequency(inputX, density);
+  let aliasY = wrapFrequency(inputY, density);
+  // Para um campo real, os vetores v e -v descrevem o mesmo padrão. Sem
+  // normalizar para o semiplano fx >= 0 a seta pode apontar para o lado oposto
+  // ao das listras que aparecem na saída amostrada.
+  if (aliasX < 0 || (aliasX === 0 && aliasY < 0)) { aliasX = -aliasX; aliasY = -aliasY; }
   const aliasMagnitude = Math.hypot(aliasX, aliasY);
   const nyquist = density / 2;
   $("input-frequency").textContent = `${frequency.toFixed(1)} cycles/FOV`;
   $("alias-frequency").textContent = `${aliasMagnitude.toFixed(1)} cycles/FOV`;
   $("nyquist-frequency").textContent = `${nyquist.toFixed(1)} cycles/FOV`;
-  const aliased = Math.abs(inputX) > nyquist || Math.abs(inputY) > nyquist;
+  // Exatamente em f = f_N há só 2 amostras por ciclo e o resultado depende da
+  // fase: a senoide pode até desaparecer. Não é "seguro".
+  const atNyquist = Math.abs(Math.abs(inputX) - nyquist) < 1e-9 || Math.abs(Math.abs(inputY) - nyquist) < 1e-9;
+  const aliased = Math.abs(inputX) >= nyquist || Math.abs(inputY) >= nyquist;
   const status = $("alias-status");
-  status.textContent = tr(aliased ? "status_alias" : "status_safe");
+  status.textContent = tr(atNyquist ? "status_nyquist" : aliased ? "status_alias" : "status_safe");
   status.classList.toggle("is-safe", !aliased);
   drawFrequencySpace(aliasX, aliasY, inputX, inputY, nyquist);
   setControlNumberValue("signal-frequency", frequency.toFixed(0));
@@ -676,8 +811,8 @@ async function initializeThreeScene() {
   const container = $("three-canvas");
   try {
     const [THREE, { OrbitControls }] = await Promise.all([
-      import("three"),
-      import("three/addons/controls/OrbitControls.js"),
+      import("./vendor/three.module.js"),
+      import("./vendor/addons/controls/OrbitControls.js"),
     ]);
     const scene = new THREE.Scene();
     scene.background = new THREE.Color("#0a1421");
