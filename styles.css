@@ -170,3 +170,28 @@ code { display: block; padding: 11px; border-radius: 7px; background: var(--surf
   .lesson-formulas { grid-template-columns: 1fr; }
   .help-popover { right: 16px; bottom: 16px; }
 }
+
+/* ---------------------------------------------------------------------------
+   Fundo fixo.
+   Usa uma camada própria em position:fixed em vez de background-attachment:
+   fixed, que o Safari do iOS ignora e que obriga o navegador a repintar a
+   imagem inteira a cada rolagem.
+   O véu claro por cima cumpre duas funções: mantém o texto legível e reduz o
+   contraste da malha fina da imagem, que de outro modo competiria com as
+   grades desenhadas nos canvases - exatamente o efeito que este laboratório
+   ensina a evitar.
+--------------------------------------------------------------------------- */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(rgba(244, 247, 251, .82), rgba(244, 247, 251, .82)),
+    url("assets/moire-background.webp") center / cover no-repeat;
+}
+
+/* Quem prefere menos movimento e menos ruído visual recebe o fundo liso. */
+@media (prefers-reduced-motion: reduce) {
+  body::before { background: var(--surface-soft); }
+}
