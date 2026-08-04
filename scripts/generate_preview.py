@@ -21,6 +21,7 @@ matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
+from PIL import Image
 
 from moire_physics import (  # noqa: E402
     alias_vector_2d,
@@ -120,8 +121,24 @@ def main() -> None:
     ax_frequency.legend(loc="upper right")
 
     fig.suptitle("Moiré Optics Lab", fontsize=22, weight="bold")
-    fig.savefig(ROOT / "assets" / "preview.png", dpi=180, bbox_inches="tight")
+    # 95 dpi gives about 1170 px across, which is already generous for the
+    # README column on GitHub. The previous 180 dpi produced a 2210 px file for
+    # no visible benefit.
+    preview = ROOT / "assets" / "preview.png"
+    fig.savefig(preview, dpi=95, bbox_inches="tight")
     plt.close(fig)
+
+    # Matplotlib writes a full-colour PNG, roughly 340 kB for these panels. The
+    # figure only ever uses a viridis ramp, a grey ramp and a few flat interface
+    # colours, so a 256-entry palette reproduces it with a mean error of about
+    # 0.2 of one level out of 255 while cutting the file to well under half.
+    # Lossy formats were measured too: WebP at quality 90 lands at a similar
+    # size with roughly twenty-five times that error, which is the wrong trade
+    # for a figure whose subject is fine periodic detail.
+    with Image.open(preview) as raw:
+        raw.convert("RGB").quantize(colors=256, method=Image.MEDIANCUT).save(
+            preview, "PNG", optimize=True
+        )
 
 
 if __name__ == "__main__":
